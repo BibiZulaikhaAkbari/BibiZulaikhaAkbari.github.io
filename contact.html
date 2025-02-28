@@ -7,12 +7,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="styles.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-    <!-- Favicon -->
-    <link rel="icon" href="images/zulaikha.JPG" type="image/x-icon">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="main.html">Bibi Zulaikha Akbari</a>
+        <a class="navbar-brand" href="index.html">Bibi Zulaikha Akbari</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -54,7 +52,7 @@
         </ul>
 
         <h2 data-aos="fade-up" class="mt-5">Contact Form</h2>
-        <form id="contact-form" onsubmit="handleSubmit(event)" data-aos="fade-up">
+        <form name="submit-to-google-sheet" data-aos="fade-up">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="name">Name</label>
@@ -145,11 +143,23 @@
       AOS.init();
     </script>
     <script>
-        function handleSubmit(event) {
-            event.preventDefault();
-            document.getElementById('confirmation-message').style.display = 'block';
-            document.getElementById('contact-form').reset();
-        }
-    </script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbw9diDy6dhh5VIcgeYtreRFEJ8xoKkB5eTnj89OIAebisD19478jHXFvxqp6y1MBNbw/exec'
+        const form = document.forms['submit-to-google-sheet']
+        const confirmationMessage = document.getElementById('confirmation-message');
+      
+        form.addEventListener('submit', e => {
+          e.preventDefault()
+          fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => {
+                console.log('Success!', response);
+                confirmationMessage.style.display = 'block';
+                form.reset();
+            })
+            .catch(error => {
+                console.error('Error!', error.message);
+                alert('An error occurred. Please try again.');
+            });
+        })
+      </script>
 </body>
 </html>
